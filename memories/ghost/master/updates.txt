@@ -7,7 +7,7 @@ file,ghost/master/icon.ico2bed51e7ace23e188679bf541358f614size=65582date=2024
 file,ghost/master/kero_menu.dic8ed124c0eb6bfb7cb570eb4bf9f99314size=1089date=2023-05-06T22:47:14
 file,ghost/master/meta.dic2b5b74ccc7d3808709475f1570d927b9size=6010date=2024-03-06T04:42:27
 file,ghost/master/mouse.dicf34d2b74a68fd4a145cf415bf0f9a218size=890date=2023-04-14T22:13:01
-file,ghost/master/other.dic8a04392755a6c83a84d255d0d93b700esize=7640date=2024-05-30T13:24:37
+file,ghost/master/other.dica3a07d7e2d3fb3c435a6dea7aa2b89c8size=7649date=2024-05-30T13:37:10
 file,ghost/master/sakura_menu.dicdb79f326c585598dbcdc034e6a9c8bedsize=14449date=2024-05-30T13:08:49
 file,ghost/master/word.dica2b803a0f98e31ef97af2e21f9a0d566size=1629date=2024-03-06T04:33:27
 file,ghost/master/yaya.dllfa8bac5d6d7346524317f731dc63803dsize=880640date=2024-02-04T08:07:55

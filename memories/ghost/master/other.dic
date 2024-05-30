@@ -50,7 +50,7 @@ OnWindowStateRestore
 //Tada! That's your url! Make sure you test it! The dev palette and script/network log can help with that
 On_homeurl
 {
-	"https://raw.githubusercontent.com/Zdzisiu/Lost-in-the-sea-of-stars/main/"
+	"https://raw.githubusercontent.com/Zdzisiu/Lost-in-the-sea-of-stars/main/memories/"
 }
 
 
