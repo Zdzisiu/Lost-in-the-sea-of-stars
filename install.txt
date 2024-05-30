@@ -1,5 +1,0 @@
-charset,UTF-8
-type,ghost
-
-name,Lost in the sea of stars
-directory,memories
