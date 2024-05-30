@@ -16,4 +16,4 @@ icon,icon.ico
 
 sstp.allowunspecifiedsend,0
 
-balloon,Scribloon
+balloon,Scriblloon
