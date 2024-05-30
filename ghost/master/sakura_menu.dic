@@ -1,0 +1,300 @@
+SakuraMenuGreetings : nonoverlap
+{
+	"What is it little bug?"
+}
+
+//Because there is an all modifier here, you don't need to write -- between menu options
+OnSakuraMenu : all
+{
+	"\0\s[0]\b2\![set,autoscroll,disable]"
+	if SHIORI3FW.Eventid == "OnMouseDoubleClick"; SakuraMenuGreetings //The check here is so they won't comment if you click the back button. Remove if you prefer
+	
+	"\n\n\_q"
+	
+	"\![*]\q[Talk to me,OnAiTalk]"
+	if LastTalk != ""; "  \![*]\q[Say that again,OnLastTalk]"
+	"\n\n[half]\![*]\q[I have a question . . .,OnAsk]"
+	if Flag(1,"recall"); "\n\n[half]\![*]\q[Can you recall . . .,OnAskRecall]"
+	"\n\n"
+	
+	"\![*]\q[Change talk rate,OnTalkRateMenu]\n\n"
+	
+	"\![*]\q[Nevermind,blank]"	
+}
+
+OnAsk : all
+{
+	"Go on.\n\n[half]\_q\b2"
+	//Are you playing chess?
+	"\![*]\__q[OnQuestion,who]Who are you?\__q\n"
+	if Flag(0,"name"); "\![*]\__q[OnQuestion,name]But what's your name?\__q\n"
+	if Flag(0,"memories"); "\![*]\__q[OnQuestion,memories]You lost your memories?\__q\n"
+	if Flag(0,"god"); "\![*]\__q[OnQuestion,god]You are God?\__q\n"
+	if Flag(0,"existance"); "\![*]\__q[OnQuestion,existance]Your 'old existence'?\__q\n"
+
+	"\![*]\__q[OnQuestion,board]What's up with the empty chessboard?\__q\n"
+	if Flag(0,"opponent"); "\![*]\__q[OnQuestion,opponent]Who are you playing against?\__q\n"
+	"\n[half]"
+
+	"\![*]\__q[OnQuestion,bug]Why are you calling me a bug?\__q\n"
+	"\![*]\__q[OnQuestion,place]Where are we here?\__q\n"
+	if Flag(0,"space"); "\![*]\__q[OnQuestion,space]Why are we?\__q\n"
+	if Flag(0,"home"); "\![*]\__q[OnQuestion,home]How can I get back?\__q\n"
+	if Flag(0,"death"); "\![*]\__q[OnQuestion,death]Am I dead?\__q\n"
+	if Flag(0,"lost"); "\![*]\__q[OnQuestion,lost]Why can't I remember anything?\__q\n"
+	if Flag(0,"remember"); "\![*]\__q[OnQuestion,remember]You can remember something!\__q\n"
+	//If metioned gods: ask about them
+	"\n[half]\![*]\q[Nevermind,blank]"
+}
+
+OnQuestion
+{
+	if reference0 == "board" {
+		"It's my opponent's turn,\w4 so of course they have the pieces."
+		AddFlag("opponent")
+	}
+	elseif reference0 == "opponent"
+	{
+		"Well, I don't really remember,\w4 to be honest.\w5 I don't remember much at all,\w4 or at least not the important bits .\w4 .\w4 .\w4 .\w4 .\w4 .\w4 .\w4 Maybe I'm not playing against anyone after all?"
+		AddFlag("memories")
+	}
+	elseif reference0 == "who"
+	{
+		"An old god,\w4 slowly fading from existence."
+		AddFlag("name")
+	}
+	elseif reference0 == "name"
+	{
+		"Wish I could tell you,\w4 little bug,\w4 but I don't remember that myself."
+		AddFlag("memories")
+	}
+	elseif reference0 == "god"
+	{
+		"A god,\w4 yes,\w4 one of many .\w4 .\w4 .\w4 although probably not for long."
+	}
+	elseif reference0 == "place"
+	{
+		"Can't you tell?\w4 The planets,\w4 the stars,\w4 the 'sun' burning behind us.\w4 Your kind always gazes up here with so much interest,\w4 although we are much,\w4 much further than you ever managed to reach."
+		AddFlag("space")
+	}
+	elseif reference0 == "space"
+	{
+		"I don't know either,\w4 really.\w4 Both of us naturally drifted here,\w4 even if for different reasons."
+		AddFlag("home")
+	}
+	elseif reference0 == "home"
+	{
+		if Flag(0,"death"); "If I knew I'd go back myself,\w4 but alas,\w4 I can't remember the way back .\w4 .\w4 .\w4 I'm sorry I can't be more of a help,\w4 little bug."
+		else; "If I knew I'd go back myself,\w4 but alas,\w4 I can't remember the way back.\w4 If it goes well,\w4 your reaper will eventually find you .\w4 .\w4 .\w4 I'm sorry I can't be more of a help,\w4 little bug"
+		AddFlag("home")
+	}
+	elseif reference0 == "existance"
+	{
+		"Before everything was,\w4 there was nothing,\w6 and then there was something,\w2 and so became I to turn it into nothing again.\w4 An endless cycle of destruction and creation,\w3 of chaos and order.\w5 Until there was more.\w6 With people came belief,\w2 and with belief\w4 - change.\w7 I was no longer just an existence.\w8 I was reshaped by their belief into a god.\w7 Now that the belief is no more,\w4 I no longer will be a god,\w7 just an existence."
+		AddFlag("god")
+	}
+	elseif reference0 == "memories"
+	{
+		"Yes,\w5 it seems like an old god like me is no longer worshiped.\w5 I don't have my divine power,\w4 and so I don't have my memories.\w6 My existence as god is slowly fading and taking my memories with it.\w4 It's surprising I'm still here,\w5 and not back to my old existence."
+		AddFlag("existance","god")
+
+	}
+	elseif reference0 == "bug"
+	{
+		"Mortal souls always remind me of that one beetle I saw,\w6 shimmering and constantly changing their appearance.\w4 A pulsing array of colors,\w2 a constantly tangling thread.\w7 A beautiful chaos."
+		AddFlag("death")
+	}
+	elseif reference0 == "death"
+	{
+		if Flag(0,"memories"); "Seems that we are alike little bug,\w5 missing the most important bits.\w4 Yes,\w3 you are most likely dead.\w5 You could just be momentarily drifting away from your body,\w4 but that's quite rare .\w6 .\w6 .\w6 and you would still have your memories."
+		else; "Yes,\w3 you are most likely dead.\w5 You could just be momentarily drifting away from your body,\w4 but that's quite rare .\w6 .\w6 .\w6 and you would still have your memories."
+		AddFlag("lost")
+	}
+	elseif reference0 == "lost"
+	{
+		"Those who have passed won't remember,\w4 preventing them from pursuing life.\w6 .\w6 .\w6 or something of that effect .\w6 .\w6 .\w6 Hm .\w6 .\w6 .\w6 It doesn't really fit.\w5 Maybe this was only in specific cases?\w7 Well,\w4 seems like I can't actually answer that.\w7 I apologize."
+		AddFlag("remember","prevention")
+	}
+	elseif reference0 == "remember"
+	{
+		"I can?\w5 Oh,\w3 you're right,\w5 there is something.\w6 Maybe someone remembers me still?"
+		AddFlag("recall")
+	}
+	--
+	"\x"
+	--
+	OnAsk
+}
+
+OnAskRecall : all
+{
+	"I will try.\n\n[half]\_q\b2"
+	"\![*]\__q[OnRecall,name]Can you recall your name?\__q\n"
+	if !Flag(0,"library","tree","lake","door","well","temple"); "\![*]\__q[OnRecall,home]Can you recall your home?\__q\n"
+	else; "\![*]\__q[OnRecall,home]Can you recall anything more about your home?\__q\n"
+	"\n\n[half]"
+	"\![*]\__q[OnRecall,case]Can you recall 'the specific cases'?\__q\n"
+	if Flag(0,"guardian"); "\![*]\__q[OnRecall,guardian]Can you recall 'the guardians'?\__q\n"
+	if Flag(0,"guarding"); "\![*]\__q[OnRecall,guarding]Can you recall what they were guarding?\__q\n"
+	if Flag(0,"they"); "\![*]\__q[OnRecall,they]Can you recall who 'they' were?\__q\n"
+	if !Flag(0,"first"); "\![*]\__q[OnRecall,follower]Can you recall something about your followers?\__q\n"
+	else; "\![*]\__q[OnRecall,follower]Can you recall something more about your followers?\__q\n"
+	if !Flag(0,"second"); "\![*]\__q[OnRecall,second]Can you recall the name of your second follower?\__q\n"
+	if Flag(0,"gods"); "\![*]\__q[OnRecall,gods]Can you recall anything about other gods?\__q\n"
+	"\![*]\__q[OnRecall,end]Can you recall anything about how to leave this place?\__q\n"
+}
+
+OnRecall
+{
+	if reference0 == "name" {
+		"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+	}
+	elseif reference0 == "home" {
+		if Flag(0,"library","tree","lake","door","well","temple","arch","cave","forest") {
+			"Hmm .\w6 .\w6 .\w6 There is nothing more I can recall."
+		}
+		elseif Flag(0,"library","tree","lake","door","well","temple") {
+			"Hmm .\w6 .\w6 .\w6 There is more.\w4 There is an arch,\w5 a cave,\w4 a spot in the forest?\w6 That last one feels very familiar."
+			AddFlag("arch","cave","forest")
+		}
+		elseif RAND(50) > 25 && !Flag(0,"library","tree","lake","door","well","temple") {
+			"Hmm .\w6 .\w6 .\w6 There is something.\w6 I can recall things,\w4 no,\w5 places?\w3 A lake,\w5 a library,\w6 a tree facing a door,\w4 a well,\w6 a temple .\w6 .\w6 .\w6 I think there should be more,\w5 but I can't recall."
+			AddFlag("library","tree","lake","door","well","temple")
+		}
+		else; "Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+	}
+	elseif reference0 == "case" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 'Those who have passed won't remember,\w5 preventing them from pursuing life',\w3 so the .\w6 .\w6 .\w6 Hmm .\w6 .\w6 .\w6 so the Guardians don't leave their stations,\w6 putting others at risk .\w6 .\w6 .\w6 Yeah,\w3 that's how it went."
+			AddFlag("guardian","guarding")
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "guardian" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 Lost souls put to work,\w5 doing the bidding of gods.\w3 Guarding places the gods were supposed to watch over.\w5 Does that mean I had one as well?"
+			AddFlag("guardian","guarding")
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "guarding" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 Places?\w3 Many places,\w6 scattered everywhere and nowhere.\w7 Never allowed to leave their post,\w3 always in one place,\w6 doing one thing,\w4 over and over.\w6 Until they make a mistake,\w8 and they are no more.\w4 There are many souls that can replace them,\w5 they said.\w4 They had many,\w6 while I only had two .\w6 .\w6 .\w6 One would have been enough if it weren't for them."
+			AddFlag("they")
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "follower" {
+		if Flag(0,"first") {
+			"Hmm .\w6 .\w6 .\w6 The second,\w4 bright fellow.\w6 His soul was trashing,\w3 as if all the strings wanted to move in a different direction.\w4 Even being told about his imminent doom,\w6 he was thrilled by everything around him.\w5 He must have been alone for so long.\w6 He must still be .\w6 .\w6 .\w6 Is he the one who remembers me? Hmm .\w6 .\w6 .\w6 . What was his name?"
+			AddFlag("second")
+		}
+		elseif RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 The first,\w4 an unlucky guy.\w5 On the brink of fading by his own fault.\w6 Maybe he would have been better off fading there."
+			AddFlag("first")
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w4 still nothing."
+		}
+	}
+	elseif reference0 == "they" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 'They', the other gods.\w3 Young ones,\w5 despite living longer than any mortal.\w4 They never learn of the importance of anything besides their domain.\w5 As fools do,\w3 they believe they know best,\w6 their power is absolute,\w5 and their right is the only one .\w6 .\w6 .\w6 truly foolish."
+			AddFlag("gods")
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "gods" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 The God of Knowledge,\w5 strict about things that don't matter, uptight,\w4 never listens.\w6 Thinks of himself as omniscient .\w6 .\w6 .\w6 his existence would not stand even a fraction of what I saw in my existence .\w6 .\w6 .\w6 I feel very .\w6 .\w6 .\w6 What was the word you mortal use?\w4 Ah,\w5 hate.\w6 I feel strong hatred towards him in particular."
+			"Hmm .\w6 .\w6 .\w6 The God of Death,\w5 or just death.\w6 A quiet one.\w7 He appreciates life and living like no other.\w4 Born when the first being came to life along with his sister Life,\w5 and became a god when the first sentient beings started their worship."
+			"Hmm .\w6 .\w6 .\w6 The God of Life,\w5 or just life.\w4 Sees life and living as worthless,\w3 and pays no proper attention to it.\w6 I don't think I saw her often."
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "second" {
+		if RAND(50) > 25 {
+			"Hmm .\w6 .\w6 .\w6 The second,\w4 the first,\w6 both bear the same name .\w6 .\w6 .\w6 I can't remember.\![open,inputbox,OnFollower,-1]"
+		}
+		else{
+			"Hmm .\w6 .\w6 .\w6 No,\w5 still nothing."
+		}
+	}
+	elseif reference0 == "end" {
+		"You're hesitating.\w4 Is this really what you want to ask?\n\n[half]\![*]\__q[OnBelief]Yes, I want to leave\__q\n\![*]\__q[OnAskRecall]No,\w6 I'm not ready yet\__q"
+	}
+	--
+	"\x"
+	--
+	OnAskRecall
+}
+
+OnFollower
+{
+	if STRDIGEST(TOLOWER(reference0)) == "5B752E863BAF599AC48FE129A33D456E"; "Hmmm .\w6 .\w6 .\w6 Yes, that's it.\w5 The third name of his kind.\w4 Sitting and guarding the void itself,\w6 making sure it doesn't consume all that is."
+	else; "Hmmm .\w6 .\w6 .\w6 No, that doesn't sound right."
+}
+
+OnBelief : all
+{
+	"Hmm .\w6 .\w6 .\w6 Before I was like this,\w5 I could freely come and go,\w5 but I had to use my divine power to do so.\w6 Right now, all of it is being used to keep me from unraveling.\w4 To leave, I would need power .\w6 .\w6 .\w6\s[1] Even without knowing my name,\w3 you could become my follower,\w5 even if for a brief moment.\w3 Both of us would stop fading,\w2 and I could take you out of this place.\w5 So,\w5 what do you think?\n\n[half]"
+	"\![*]\__q[OnEnd,belief]I will become your follower\__q\n"
+	"\![*]\__q[OnEnd,lie](lie) I will become your follower\__q\n"
+	"\![*]\__q[OnEnd,stagnant]I don't want to be your follower\__q\n"
+}
+
+OnEnd
+{
+	if reference0 == "belief"; "\0\s[0]\i[1]\w5\w5Seems like it worked,\w5 so how about it,\w5 a round of chess before we leave?"
+	elseif reference0 == "lie"; "\0\s[0]\i[0]\w5\w5\s[8]\f[height,-4]How weird,\w5 what is .\w6 .\w6 .\w6 hmm .\w6 .\w6 .\w6\f[height,default]Ah,\w3\s[9] apologies,\s[2] seems that wasn't enough to even to make some chess pieces.\w5 I wanted to see if it worked .\w6 .\w6 .\w6 but it didn't.\w4 I apologize,\w6 but I can't help you leave."
+	else; "Then there is nothing I can do,\w5 I apologize."
+	--
+	ClearFlags()
+	AddFlag("end")
+	--
+	//"\w8\w8\w8\w8\w8\-"
+}
+
+
+OnLastTalk
+{
+	LastTalk
+}
+
+OnTalkRateMenu : all
+{	
+	//This is just setting up a label, you may need to add to it or tweak it if you change what rates are available
+	_talkrate = "Off"
+	if aitalkinterval == 30; _talkrate = "30 seconds"
+	elseif aitalkinterval == 60; _talkrate = "1 minute"
+	elseif aitalkinterval == 180; _talkrate = "3 minutes"
+	elseif aitalkinterval == 300; _talkrate = "5 minutes"
+	elseif aitalkinterval == 600; _talkrate = "10 minutes"
+	
+	"\0\s[0]\b2\![set,autoscroll,disable]\_q"
+	"Current interval: %(_talkrate)\n\n"
+	
+	"\![*]\q[Off,OnTalkRateChange,0]\n"
+	"\![*]\q[30 seconds,OnTalkRateChange,30]\n"
+	"\![*]\q[1 minute,OnTalkRateChange,60]\n"
+	"\![*]\q[3 minutes,OnTalkRateChange,180]\n"
+	"\![*]\q[5 minutes,OnTalkRateChange,300]\n"
+	"\![*]\q[10 minutes,OnTalkRateChange,600]\n"
+	"\n"
+	"\![*]\q[Back,OnSakuraMenu]  \![*]\q[Nevermind,blank]"
+}
+
+OnTalkRateChange
+{
+	aitalkinterval = TOINT(reference0)
+}
